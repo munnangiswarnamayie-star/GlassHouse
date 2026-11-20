@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>GlassHouse – AI Agent Command Center</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="GlassHouse is a transparent, human-in-the-loop AI agent command center. Specialist agents, visible handoffs, approval at every stage and reusable workflows.">
+<meta property="og:title" content="GlassHouse – AI Agent Command Center"><meta property="og:description" content="See every step your AI takes. Approve every handoff. Reuse every workflow."><meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232447f5'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='Arial' font-weight='700'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9f0f4;--bg2:#d5e4ee;--sf:#ffffff;--tx:#0d1f2d;--mu:#55687a;--bd:#c9d8e3;--ac:#2447f5;--acx:#fff;--ok:#0b8f63;--wr:#c97800;--er:#c0362c;--gl:rgba(255,255,255,.62);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1620;--bg2:#10283a;--sf:#13222e;--tx:#e6eff6;--mu:#93a8b9;--bd:#27404f;--ac:#6f8bff;--acx:#08121a;--ok:#3fd09b;--wr:#f0b04a;--er:#ff7d72;--gl:rgba(19,34,46,.6);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1620;--bg2:#10283a;--sf:#13222e;--tx:#e6eff6;--mu:#93a8b9;--bd:#27404f;--ac:#6f8bff;--acx:#08121a;--ok:#3fd09b;--wr:#f0b04a;--er:#ff7d72;--gl:rgba(19,34,46,.6);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;color:var(--tx);font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif;background:var(--bg) radial-gradient(900px 500px at 85% -5%,var(--bg2),transparent 70%) no-repeat;min-height:100vh}
+h1,h2,h3,.logo{font-family:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;letter-spacing:-.02em;margin:0}
+.wrap{max-width:1160px;margin:auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:5;backdrop-filter:blur(12px);background:var(--gl);border-bottom:1px solid var(--bd)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-size:22px;font-weight:700}.logo i{font-style:normal;color:var(--ac)}
+nav a{color:var(--mu);text-decoration:none;margin-left:20px;font-size:14px}nav a:hover{color:var(--tx)}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--sf);color:var(--tx);padding:9px 16px;border-radius:10px}
+button:focus-visible,a:focus-visible,textarea:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button.p{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:600}button:disabled{opacity:.5;cursor:not-allowed}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:64px 0 40px}
+.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.05;font-weight:700}
+.hero p.lead{font-size:18px;color:var(--mu);max-width:520px;margin:18px 0 26px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.glass{background:var(--gl);backdrop-filter:blur(14px);border:1px solid var(--bd);border-radius:20px;box-shadow:0 20px 50px -25px rgba(20,50,80,.45)}
+.demo{padding:26px 22px 20px}
+.lane{position:relative;display:flex;justify-content:space-between;margin:14px 8px 8px}
+.lane:before{content:"";position:absolute;left:24px;right:24px;top:24px;height:2px;background:var(--bd)}
+.pkt{position:absolute;top:19px;left:24px;width:12px;height:12px;border-radius:50%;background:var(--ac);animation:fly 6s ease-in-out infinite}
+@keyframes fly{0%{left:24px}100%{left:calc(100% - 36px)}}
+.st{position:relative;text-align:center;width:25%}.st b{display:grid;place-items:center;width:48px;height:48px;margin:0 auto 6px;border-radius:14px;background:var(--sf);border:1px solid var(--bd);font-size:20px}
+.st span{font-size:13px;color:var(--mu)}
+.gate{margin-top:16px;padding:10px 12px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);font-size:13px;color:var(--mu)}
+.gate b{color:var(--ac)}
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:24px 0 48px;border-top:1px solid var(--bd)}
+.why h3{font-size:17px;margin-bottom:4px}.why p{margin:0;color:var(--mu);font-size:14px}
+h2{font-size:clamp(26px,3.4vw,38px);margin-bottom:6px}.sub{color:var(--mu);margin:0 0 22px}
+.bench{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+.panel{padding:18px}.panel h3{font-size:15px;margin-bottom:10px}
+.seg{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.seg button{text-align:left;padding:9px 12px}.seg button[aria-pressed=true]{border-color:var(--ac);box-shadow:inset 0 0 0 1px var(--ac)}.seg small{display:block;color:var(--mu)}
+textarea{width:100%;min-height:84px;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);color:var(--tx);font:inherit;resize:vertical}
+label.ck{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--mu);margin:10px 0}
+.rail{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.nd{flex:1;min-width:130px;padding:10px 12px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);font-size:14px}
+.nd small{display:block;color:var(--mu)}
+.nd.run{border-color:var(--ac)}.nd.wait{border-color:var(--wr)}.nd.done{border-color:var(--ok)}.nd.flag{border-color:var(--er)}
+.step{padding:16px;margin-bottom:12px}
+.step h3{font-size:17px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.tag{font:500 12px "IBM Plex Sans",sans-serif;color:var(--mu)}
+.log{margin:8px 0;padding:8px 10px;border-radius:10px;background:var(--bg);color:var(--mu);font-size:13px;white-space:pre-wrap}
+.out{white-space:pre-wrap;padding:12px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);margin:8px 0}
+.src{font-size:13px;color:var(--mu)}.bad{color:var(--er);font-size:14px;margin:6px 0}.good{color:var(--ok);font-size:14px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.kpi div{padding:12px;border-radius:14px;background:var(--sf);border:1px solid var(--bd)}
+.kpi strong{display:block;font:700 26px "Bricolage Grotesque",sans-serif}.kpi span{font-size:12px;color:var(--mu)}
+.trail{max-height:180px;overflow:auto;font:12px/1.6 ui-monospace,Menlo,Consolas,monospace;color:var(--mu);white-space:pre-wrap}
+.empty{padding:36px 20px;text-align:center;color:var(--mu)}
+.uses{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 60px}
+.uses span{padding:6px 12px;border:1px solid var(--bd);border-radius:99px;font-size:14px;color:var(--mu);background:var(--gl)}
+footer{border-top:1px solid var(--bd);padding:22px 0;color:var(--mu);font-size:13px}
+@media(max-width:860px){.hero,.bench{grid-template-columns:1fr}.why{grid-template-columns:1fr 1fr}.kpi{grid-template-columns:1fr 1fr}.mb{display:inline-block}.links{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--sf);border-bottom:1px solid var(--bd);padding:10px 20px}.links.open{display:flex}.links a{margin:8px 0}}
+@media(prefers-reduced-motion:reduce){.pkt{animation:none;left:50%}html{scroll-behavior:auto}}
+.pg{display:none}.pg.on{display:block}.links{display:flex;align-items:center}.mb{display:none}.cur{color:var(--tx)!important;font-weight:600}
+.g3{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}.g3 .panel p{margin:6px 0 12px;font-size:14px}.g3 ul{margin:8px 0 0;padding-left:18px;color:var(--mu);font-size:14px}
+.pgh{padding:44px 0 18px}.how{padding:0 0 56px}.how h2{margin-bottom:14px}#audit,#hist{margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-weight:500}.tw{overflow-x:auto}
+</style></head><body>
+<nav><div class="wrap"><a class="logo" href="#home" style="text-decoration:none;color:inherit;margin:0">Glass<i>House</i></a><button class="mb" id="mb" aria-label="Menu" aria-expanded="false">Menu</button><div class="links" id="links"><a href="#home">Home</a><a href="#app">Workbench</a><a href="#usecases">Use cases</a><a href="#templates">Templates</a><a href="#roadmap">Roadmap</a><button class="p" id="nav-run" style="margin-left:20px">Try the demo</button></div></div></nav>
+<main class="wrap">
+<div class="pg" id="p-home">
+<section class="hero"><div>
+<h1>See every step your AI takes before it reaches your customers.</h1>
+<p class="lead">GlassHouse splits a job across specialist AI agents, shows you each handoff, and waits for your approval before anything moves forward. Fewer surprises, a full record, and workflows your team can reuse.</p>
+<div class="row"><button class="p" id="hero-run">Run the live demo</button><button id="hero-uses">See who it’s for</button></div></div>
+<div class="glass demo" aria-label="Pipeline preview"><h3 style="font-size:15px;color:var(--mu)">Competitor brief</h3>
+<div class="lane"><span class="pkt"></span>
+<div class="st"><b>1</b><span>Researcher</span></div><div class="st"><b>2</b><span>Writer</span></div><div class="st"><b>3</b><span>Fact-Checker</span></div><div class="st"><b>4</b><span>Reviewer</span></div></div>
+<div class="gate"><b>Human approval:</b> you review every agent’s output before it moves to the next stage.</div></div></section>
+<section class="why"><div><h3>Visible handoffs</h3><p>Read what each agent produced and what the next one received.</p></div><div><h3>Approval at every stage</h3><p>Edit, approve or send back. Nothing ships on its own.</p></div><div><h3>Built-in fact checks</h3><p>Unsupported claims are flagged and must be resolved first.</p></div><div><h3>Reusable workflows</h3><p>Save a proven setup and run it again in one click.</p></div></section>
+
+<section class="how"><h2>How a run works</h2><div class="g3"><div class="glass panel"><h3>1. Describe the job</h3><p>Pick a workflow or reuse a template.</p></div><div class="glass panel"><h3>2. Agents hand off</h3><p>Each specialist works, then shows you its output.</p></div><div class="glass panel"><h3>3. You approve</h3><p>Edit, send back or approve. Flagged claims must be fixed.</p></div><div class="glass panel"><h3>4. Keep the record</h3><p>Export the audit trail and save the workflow.</p></div></div></section></div>
+<div class="pg" id="p-app"><section class="pgh" style="padding-bottom:6px"><h2>GlassHouse command center</h2><p class="sub">Run multi-step knowledge work across specialist agents, with a person approving every handoff.</p>
+<div class="g3"><div class="glass panel"><h3>The problem</h3><ul><li>AI output is a black box, with no visible sources or checks</li><li>One-pass answers let errors through</li><li>Managers cannot see or approve what the AI did</li><li>Prompts are rewritten by hand every time</li></ul></div>
+<div class="glass panel"><h3>How GlassHouse responds</h3><ul><li>Each agent shows its steps and sources</li><li>A dedicated Fact-Checker blocks unsupported claims</li><li>Approve, edit or send back at every stage</li><li>Any workflow can be saved as a template</li></ul></div>
+<div class="glass panel"><h3>Agent roster</h3><ul><li>Researcher: gathers sources and key facts</li><li>Writer: drafts from approved research</li><li>Fact-Checker: verifies claims against sources</li><li>Reviewer: checks tone, clarity and completeness</li><li>Triager and Summarizer: classify and condense</li></ul></div></div></section>
+<section id="bench"><h2>Run a workflow</h2><p class="sub">Pick a job, run it, and approve each step. The agents here are simulated for demonstration.</p>
+<div class="bench"><aside class="glass panel"><h3>Workflow</h3><div class="seg" id="seg"></div>
+<h3>Task</h3><textarea id="task" aria-label="Task"></textarea>
+<label class="ck"><input type="checkbox" id="auto"> Auto-approve clean steps</label>
+<div class="row"><button class="p" id="go">Run workflow</button><button id="reset">Clear</button></div>
+<h3 style="margin-top:18px">Save as template</h3><div class="row"><input id="tn" placeholder="Template name" aria-label="Template name" style="flex:1;min-width:0;padding:9px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);color:var(--tx);font:inherit"><button id="save">Save</button></div></aside>
+<div><div class="kpi" id="kpi"></div><div class="rail" id="rail"></div><div id="steps"><div class="glass empty">Choose a workflow and press <b>Run workflow</b>. Each agent will stop for your approval.</div></div>
+<div class="glass panel" id="hist"><h3>Recent runs</h3><div class="tw" id="hbody"></div></div><div class="glass panel" id="audit" style="display:none"><h3>Audit trail</h3><div class="trail" id="trail"></div><div class="row" style="margin-top:10px"><button id="exp">Export as JSON</button></div></div></div></div></section>
+
+</div>
+<div class="pg" id="p-usecases"><section class="pgh"><h2>Built for the teams doing the work</h2><p class="sub">Pick a role to open a matching workflow in the workbench.</p><div class="g3">
+<div class="glass panel"><h3>Marketing and content teams</h3><p>Research a topic, draft a post, fact-check and polish it.</p><button class="p" data-uc="1">Try this workflow</button></div>
+<div class="glass panel"><h3>Startup founders</h3><p>Competitor research and short briefs for investors or the team.</p><button class="p" data-uc="0">Try this workflow</button></div>
+<div class="glass panel"><h3>Consultants and analysts</h3><p>Turn raw research into a structured client report.</p><button class="p" data-uc="3">Try this workflow</button></div>
+<div class="glass panel"><h3>HR and recruiters</h3><p>Summarise candidate profiles against a role, with a bias check.</p><button class="p" data-uc="4">Try this workflow</button></div>
+<div class="glass panel"><h3>Customer support leads</h3><p>Triage tickets, draft replies and flag escalations.</p><button class="p" data-uc="2">Try this workflow</button></div>
+<div class="glass panel"><h3>Students and researchers</h3><p>Summarise papers with a visible reasoning trail.</p><button class="p" data-uc="5">Try this workflow</button></div></div></section></div>
+<div class="pg" id="p-templates"><section class="pgh"><h2>Workflow templates</h2><p class="sub">Reuse a proven setup instead of rewriting prompts. Templates you save appear here.</p><div class="g3" id="tgrid"></div></section></div>
+<div class="pg" id="p-roadmap"><section class="pgh"><h2>Roadmap</h2><p class="sub">What works in this prototype, and where it goes next.</p><div class="g3">
+<div class="glass panel"><h3>Available now</h3><ul><li>Specialist agents with visible handoffs</li><li>Approve, edit or send back at each step</li><li>Fact-check gate for unsupported claims</li><li>Reusable templates</li><li>Run history and exportable audit trail</li></ul></div>
+<div class="glass panel"><h3>Next</h3><ul><li>Connect live models to each agent</li><li>Cite live sources</li><li>Team accounts and role-based approvals</li></ul></div>
+<div class="glass panel"><h3>Later</h3><ul><li>Shared template library</li><li>Run analytics</li><li>Automatic failure detection</li><li>Slack and email integrations</li></ul></div></div><p class="src" style="margin-top:16px">The agents in this demo are simulated.</p></section></div>
+</main>
+<footer><div class="wrap">GlassHouse · A transparent, human-in-the-loop agent platform for knowledge work.</div></footer>
+<script>
+const S=[
+{n:"Competitor brief",d:"Research, write, verify, review",a:["Researcher","Writer","Fact-Checker","Reviewer"],task:"Research a competitor in project-management software and write a short brief for our leadership team.",
+ s:[{log:"parse task\nsearch 5 source types\nextract 9 claims",out:"Key findings\n1. Competes on simplicity and flat pricing.\n2. Strongest with teams under 50 people.\n3. Weak on reporting and integrations.\n4. Announced a free tier recently.\n5. Customers praise onboarding, criticise support speed.",src:["Pricing page","Product changelog","Customer reviews","Analyst note","Press release"],claims:9},
+ {log:"read approved research\noutline: summary, strengths, gaps, next steps",out:"Competitor brief\n\nSummary: The competitor wins on simplicity and clear pricing, aimed at teams under 50.\n\nStrengths: fast onboarding, flat pricing, and a new free tier.\n\nGaps: limited reporting, thin integrations, slow support.\n\nThey hold roughly 40% of the segment.\n\nNext step: lead our positioning with reporting depth and support speed."},
+ {log:"extract claims from draft: 6\nmatch each to a source",out:null,check:{p:"roughly 40%",m:"Unsupported claim: “roughly 40% of the segment” has no source in the research. Remove or edit it to continue."},claims:6},
+ {log:"check structure, tone, completeness",out:null,note:"Structure clear, tone professional. Ready to send."}]},
+{n:"LinkedIn post",d:"Draft, check, polish content",a:["Researcher","Writer","Fact-Checker","Reviewer"],task:"Write a LinkedIn post on why teams don’t trust AI-written drafts.",
+ s:[{log:"collect 4 sources\nextract 6 claims",out:"Findings\n• Reviewers can’t see where a draft’s facts came from.\n• One-pass drafts miss errors that a second reader would catch.\n• Teams re-write the same prompts every week.",src:["Team survey notes","Editorial guidelines","Internal retro"],claims:6},
+ {log:"draft hook, body, call to action",out:"Most teams don’t distrust AI. They distrust not knowing how an answer was made.\n\nA draft arrives with no sources and no review trail. Studies show 90% of AI drafts contain errors.\n\nShow the steps, add a checker, keep a human at the gate. Trust follows."},
+ {log:"extract claims: 4",out:null,check:{p:"90%",m:"Unsupported statistic: “90% of AI drafts contain errors” has no source. Remove or replace it to continue."},claims:4},
+ {log:"check hook, length, tone",out:null,note:"Hook is strong, length suits LinkedIn. Ready to post."}]},
+{n:"Support triage",d:"Classify, reply, review",a:["Triager","Responder","Reviewer"],task:"Ticket: “I was charged twice for my annual plan and the checkout page froze.”",
+ s:[{log:"classify: billing / bug\nscore urgency",out:"Category: duplicate charge plus checkout bug\nPriority: high\nEscalate to: payments team",claims:2},
+ {log:"draft reply in brand voice",out:"Hi, thanks for flagging this. We’re sorry about the double charge. We’ve asked our payments team to refund the duplicate and will confirm within one business day."},
+ {log:"check promise, tone, policy",out:null,note:"Reply is accurate and kind. Escalation to payments is attached."}]}];
+S.push({n:"Client report",d:"Turn raw research into a client-ready report",a:["Researcher","Writer","Fact-Checker","Reviewer"],task:"Turn our retail foot-traffic research into a one-page client report.",s:[
+{log:"read 3 data sources\nextract 7 findings",out:"Findings\n• Weekend foot traffic rose in the last two quarters.\n• Longer queues appear at lunchtime.\n• Stores with clearer signage convert more visitors.",src:["Store counter data","Client survey","Site audit"],claims:7},
+{log:"structure: finding, impact, action",out:"Client report\n\nFoot traffic is rising at weekends, and lunchtime queues are the main friction. Sales grew 300% in stores with new signage.\n\nAction: add lunchtime staffing and extend the signage pilot."},
+{log:"extract claims: 3",out:null,check:{p:"300%",m:"Unsupported figure: “grew 300%” isn’t in the research. Remove it or add the source to continue."},claims:3},
+{log:"check clarity and client tone",out:null,note:"Clear and actionable. Ready to share with the client."}]},
+{n:"Candidate screening",d:"Summarise a profile against a role",a:["Summarizer","Reviewer"],task:"Summarise this candidate’s profile against the Senior Marketing Manager role.",s:[
+{log:"read profile\nmatch to role criteria",out:"Summary\n• 8 years in B2B marketing, 3 leading a team.\n• Strong on content and campaign analytics.\n• No paid-media budget ownership listed.\n\nNext step: phone screen on budget experience.",claims:3},
+{log:"check for bias and unsupported inferences",out:null,note:"Summary sticks to stated experience. No inferences about age, background or personal traits."}]},
+{n:"Literature summary",d:"Summarise papers with a visible trail",a:["Researcher","Summarizer","Fact-Checker"],task:"Summarise recent papers on remote-work productivity.",s:[
+{log:"collect 4 papers\nextract methods and results",out:"Papers reviewed\n• Study A: hybrid schedules, small positive effect on output.\n• Study B: fully remote, mixed results by role.\n• Study C: survey, higher reported focus time.",src:["Study A","Study B","Study C","Study D"],claims:8},
+{log:"condense to key points",out:"Summary\nHybrid work shows small gains in output. Results vary by role. Survey data proves remote work is better for everyone."},
+{log:"extract claims: 3",out:null,check:{p:"proves",m:"Overstated claim: “proves remote work is better for everyone” isn’t supported. Reword it to match the findings."},claims:3}]});
+let H=[];try{H=JSON.parse(localStorage.getItem("gh_h")||"[]")}catch(e){}
+let U=[];try{U=JSON.parse(localStorage.getItem("gh_u")||"[]")}catch(e){}
+let cur=0,R=null;const $=i=>document.getElementById(i);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const all=()=>S.concat(U);
+function seg(){$("seg").innerHTML=all().map((s,i)=>`<button aria-pressed="${i===cur}" data-i="${i}">${esc(s.n)}<small>${esc(s.d||s.a.join(", "))}</small></button>`).join("");
+ $("seg").querySelectorAll("button").forEach(b=>b.onclick=()=>{cur=+b.dataset.i;$("task").value=all()[cur].task;seg()})}
+function kpi(){const m=R?R.m:{ap:0,ch:0,fl:0,ed:0};$("kpi").innerHTML=`<div><strong>${m.ap}</strong><span>Steps approved</span></div><div><strong>${m.ch}</strong><span>Claims checked</span></div><div><strong>${m.fl}</strong><span>Issues caught</span></div><div><strong>${m.ap*6}m</strong><span>Est. time saved</span></div>`}
+function rail(){$("rail").innerHTML=R?R.w.a.map((a,i)=>{const t={idle:"Queued",run:"Working…",wait:"Needs your approval",flag:"Issue to fix",done:"Approved"}[R.st[i]];return `<div class="nd ${R.st[i]}"><b>${i+1}. ${a}</b><small>${t}</small></div>`}).join(""):""}
+function tr(m){R.t.push(new Date().toLocaleTimeString()+"  "+m);$("trail").textContent=R.t.join("\n");$("trail").scrollTop=1e5;$("audit").style.display="block"}
+function go(){const w=all()[cur];R={w,st:w.a.map(()=>"idle"),o:[],t:[],m:{ap:0,ch:0,fl:0,ed:0},auto:$("auto").checked};$("steps").innerHTML="";tr("Run started: "+w.n);kpi();step(0)}
+function step(i){const w=R.w;if(i>=w.a.length){tr("Run complete");hist();$("steps").insertAdjacentHTML("beforeend",'<div class="glass panel good">Workflow complete. Every action is in the audit trail below.</div>');rail();return}
+ const d=w.s[i],a=w.a[i],prev=R.o[i-1]||"";R.st[i]="run";rail();tr(a+" started");
+ const txt=d.out!==null&&d.out!==undefined?d.out:(d.note?prev+"\n\n— Review: "+d.note:prev);const bad=d.check&&txt.includes(d.check.p);
+ const el=document.createElement("div");el.className="glass step";
+ el.innerHTML=`<h3>${i+1}. ${a}<span class="tag">${i?"Received the approved output of "+w.a[i-1]:"Starts from your task"}</span></h3><div class="log">${esc(d.log)}</div>${d.src?`<div class="src">Sources: ${d.src.join(", ")}</div>`:""}<div class="out" id="o${i}" contenteditable="true" role="textbox" aria-label="${a} output">${esc(txt)}</div><div class="${bad?"bad":"good"}" id="m${i}">${bad?esc(d.check.m):d.check?"Verified: no unsupported claims found.":""}</div><div class="row" id="b${i}"></div>`;
+ $("steps").appendChild(el);R.st[i]=bad?"flag":"wait";if(bad){R.m.fl++;kpi()}rail();tr(a+" finished"+(bad?" with a flagged claim":""));
+ const b=$("b"+i);b.innerHTML='<button class="p">Approve and continue</button><button>Send back</button>'+(bad?'<button>Remove flagged sentence</button>':'');
+ const ok=()=>{const v=$("o"+i).innerText.trim();if(d.check&&v.includes(d.check.p)){$("m"+i).textContent=d.check.m;return}
+  const e=v!==txt.trim();R.o[i]=d.note?prev:v;if(e)R.m.ed++;R.m.ap++;R.m.ch+=d.claims||0;R.st[i]="done";$("o"+i).contentEditable="false";$("m"+i).textContent="";b.innerHTML=`<span class="good">Approved${e?" after your edits":""}</span>`;tr(a+" approved"+(e?" with human edits":""));kpi();step(i+1)};
+ b.children[0].onclick=ok;b.children[1].onclick=()=>{tr(a+" sent back");el.remove();step(i)};
+ if(bad)b.children[2].onclick=()=>{$("o"+i).innerText=txt.split("\n").filter(l=>!l.includes(d.check.p)).join("\n").replace(/\n{3,}/g,"\n\n");$("m"+i).className="good";$("m"+i).textContent="Flagged sentence removed. You can approve now."};if(R.auto&&!bad)setTimeout(ok,350)}
+function hist(){H.unshift({n:R.w.n,t:new Date().toLocaleString(),ap:R.m.ap,fl:R.m.fl,ed:R.m.ed});H=H.slice(0,8);try{localStorage.setItem("gh_h",JSON.stringify(H))}catch(e){}drawH()}
+function drawH(){$("hbody").innerHTML=H.length?"<table><tr><th>Workflow</th><th>When</th><th>Approved</th><th>Issues</th><th>Edits</th></tr>"+H.map(r=>`<tr><td>${esc(r.n)}</td><td>${esc(r.t)}</td><td>${r.ap}</td><td>${r.fl}</td><td>${r.ed}</td></tr>`).join("")+"</table>":'<span class="src">No completed runs yet.</span>'}
+function pick(i){cur=i;$("task").value=all()[i].task;seg();location.hash="app"}
+function drawTpl(){$("tgrid").innerHTML=all().map((s,i)=>`<div class="glass panel"><h3>${esc(s.n)}</h3><p>${esc(s.d||"")}<br><span class="src">${s.a.join(" → ")}</span></p><button class="p" data-t="${i}">Open in workbench</button></div>`).join("");$("tgrid").querySelectorAll("button").forEach(b=>b.onclick=()=>pick(+b.dataset.t))}
+const P=["home","app","usecases","templates","roadmap"];
+function route(){let h=location.hash.slice(1);if(!P.includes(h))h="home";P.forEach(p=>$("p-"+p).classList.toggle("on",p===h));document.querySelectorAll(".links a").forEach(a=>a.classList.toggle("cur",a.getAttribute("href")==="#"+h));$("links").classList.remove("open");$("mb").setAttribute("aria-expanded","false");window.scrollTo(0,0);if(h==="templates")drawTpl()}
+function run(){location.hash="app";setTimeout(go,60)}
+$("go").onclick=()=>{if($("task").value.trim())go()};$("nav-run").onclick=$("hero-run").onclick=run;
+$("hero-uses").onclick=()=>{location.hash="usecases"};
+document.querySelectorAll("[data-uc]").forEach(b=>b.onclick=()=>pick(+b.dataset.uc));
+$("mb").onclick=()=>{const o=$("links").classList.toggle("open");$("mb").setAttribute("aria-expanded",o)};
+addEventListener("hashchange",route);
+$("reset").onclick=()=>{R=null;kpi();rail();$("audit").style.display="none";$("steps").innerHTML='<div class="glass empty">Choose a workflow and press <b>Run workflow</b>.</div>'};
+$("save").onclick=()=>{const n=$("tn").value.trim();if(!n)return;const b=all()[cur];U.push({n,d:"Your template",a:b.a,s:b.s,task:$("task").value});try{localStorage.setItem("gh_u",JSON.stringify(U))}catch(e){}cur=all().length-1;$("tn").value="";seg()};
+$("exp").onclick=()=>{const u=URL.createObjectURL(new Blob([JSON.stringify(R.t,null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=u;a.download="glasshouse-audit-trail.json";a.click()};
+$("task").value=S[0].task;seg();kpi();drawH();route();
+</script></body></html>
